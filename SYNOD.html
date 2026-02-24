@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اطلب مشروعك | SYNOD</title>
+    <style>
+        :root { --bg: #f8f9fa; --white: #ffffff; --primary: #2d3436; --accent: #25d366; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .form-container { background: var(--white); padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        h2 { text-align: center; color: var(--primary); margin-bottom: 25px; }
+        label { display: block; margin: 15px 0 5px; font-weight: bold; color: #444; }
+        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: inherit; font-size: 1rem; }
+        textarea { height: 100px; resize: none; }
+        
+        /* حقل التخصيص المخفي */
+        #customTypeWrapper { display: none; margin-top: 10px; }
+        
+        .submit-btn { background: var(--accent); color: white; border: none; width: 100%; padding: 15px; border-radius: 8px; font-size: 1.1rem; font-weight: bold; cursor: pointer; margin-top: 25px; transition: 0.3s; }
+        .submit-btn:hover { background: #128c7e; transform: translateY(-2px); }
+        .back-home { display: block; text-align: center; margin-top: 15px; text-decoration: none; color: #636e72; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>ابدأ مشروعك مع SYNOD 🚀</h2>
+    <form id="orderForm">
+        <label>الاسم بالكامل</label>
+        <input type="text" id="userName" placeholder="مثلاً: محمد أحمد" required>
+
+        <label>نوع المشروع</label>
+        <select id="projectType" onchange="checkCustomType()">
+            <option value="متجر إلكتروني ذكي">متجر إلكتروني ذكي (Project 1)</option>
+            <option value="لوحة تحكم بيانات">لوحة تحكم بيانات (Project 2)</option>
+            <option value="موقع شركة تقنية">موقع شركة تقنية (Project 3)</option>
+            <option value="custom">طلب مخصص (أخرى)...</option>
+        </select>
+
+        <div id="customTypeWrapper">
+            <label>حدد نوع المشروع الذي تريده</label>
+            <input type="text" id="customTypeName" placeholder="مثلاً: موقع تعليمي، تطبيق عقارات...">
+        </div>
+
+        <label>وصف المشروع والألوان المطلوبة</label>
+        <textarea id="projectDesc" placeholder="مثلاً: أريد تصميماً هادئاً باللون الأبيض والرمادي ونفس ستايل أعمالكم.." required></textarea>
+
+        <button type="button" onclick="sendToWhatsApp()" class="submit-btn">إرسال الطلب للواتساب ✅</button>
+        <a href="home.html" class="back-home">إلغاء والعودة للرئيسية</a>
+    </form>
+</div>
+
+<script>
+    // وظيفة لإظهار/إخفاء حقل النوع المخصص
+    function checkCustomType() {
+        const typeSelect = document.getElementById('projectType');
+        const customField = document.getElementById('customTypeWrapper');
+        if (typeSelect.value === 'custom') {
+            customField.style.display = 'block';
+        } else {
+            customField.style.display = 'none';
+        }
+    }
+
+    function sendToWhatsApp() {
+        // ضع رقمك هنا (بدون أصفار أو علامة + في البداية)
+        const myPhoneNumber = "201234567890"; 
+
+        const name = document.getElementById('userName').value;
+        const desc = document.getElementById('projectDesc').value;
+        let type = document.getElementById('projectType').value;
+        
+        // إذا اختار مخصص، نأخذ القيمة من حقل الإدخال
+        if (type === 'custom') {
+            type = "طلب مخصص: " + document.getElementById('customTypeName').value;
+        }
+
+        if(!name || !desc || (type.includes('custom') && !document.getElementById('customTypeName').value)) {
+            alert("يرجى إكمال جميع الحقول المطلوبة");
+            return;
+        }
+
+        // تنسيق الرسالة
+        const message = `مرحباً SYNOD، لدي طلب مشروع جديد:%0A%0A` +
+                        `*الاسم:* ${name}%0A` + 
+                        `*نوع المشروع:* ${type}%0A` + 
+                        `*الوصف المطلوب:* ${desc}`;
+
+        const whatsappUrl = `https://wa.me/${myPhoneNumber}?text=${message}`;
+        window.open(whatsappUrl, '_blank');
+    }
+</script>
+
+</body>
+</html>
